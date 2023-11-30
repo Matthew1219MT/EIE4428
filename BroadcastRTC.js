@@ -199,10 +199,7 @@ function disableInputButtons() {
     document.getElementById('Mute').disabled = false;
 }
 
-var muteCheckbox = document.getElementById('muteCheckbox');
-muteCheckbox.addEventListener('change', function() {
-  connection.session.audio = !muteCheckbox.checked;
-});
+
 
 (function() {
     var params = {},
@@ -256,6 +253,11 @@ if (roomid && roomid.length) {
 
     disableInputButtons();
 }
+
+var muteCheckbox = document.getElementById('Mute');
+muteCheckbox.addEventListener('change', function() {
+  connection.session.audio = !muteCheckbox.checked;
+});
 
 // detect 2G
 if(navigator.connection &&
