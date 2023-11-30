@@ -196,7 +196,13 @@ function disableInputButtons() {
     document.getElementById('FaceTracking').disabled = false;
     document.getElementById('format').disabled = false;
     document.getElementById('VisualizeAudio').disabled = false;
+    document.getElementById('Mute').disabled = false;
 }
+
+var muteCheckbox = document.getElementById('muteCheckbox');
+muteCheckbox.addEventListener('change', function() {
+  connection.session.audio = !muteCheckbox.checked;
+});
 
 (function() {
     var params = {},
@@ -250,33 +256,7 @@ if (roomid && roomid.length) {
 
     disableInputButtons();
 }
-var audioTrack;
 
-// Function to handle the checkbox change event
-function handleMuteChange() {
-  if (audioTrack) {
-    audioTrack.enabled = !document.getElementById('Mute').checked;
-  }
-}
-
-// Function to set up the media stream and audio track
-async function setupMediaStream() {
-  try {
-    // Get the local media stream with audio and video
-    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-
-    // Get the audio track from the local stream
-    audioTrack = localStream.getAudioTracks()[0];
-
-    // Add event listener to the checkbox change event
-    document.getElementById('Mute').addEventListener('change', handleMuteChange);
-
-    // Enable the checkbox
-    document.getElementById('Mute').disabled = false;
-  } catch (error) {
-    console.error('Error accessing media devices:', error);
-  }
-}
 // detect 2G
 if(navigator.connection &&
    navigator.connection.type === 'cellular' &&
