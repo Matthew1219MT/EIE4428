@@ -254,10 +254,22 @@ if (roomid && roomid.length) {
     disableInputButtons();
 }
 
+var audioTrack;
+navigator.mediaDevices.getUserMedia({ audio: true })
+  .then(function(stream) {
+    audioTrack = stream.getAudioTracks()[0];
+  })
+  .catch(function(error) {
+    console.error('Error accessing media devices:', error);
+  });
+
 var muteCheckbox = document.getElementById('Mute');
 muteCheckbox.addEventListener('change', function() {
-  connection.session.audio = !muteCheckbox.checked;
+  if (audioTrack) {
+    audioTrack.enabled = !muteCheckbox.checked;
+  }
 });
+
 
 // detect 2G
 if(navigator.connection &&
