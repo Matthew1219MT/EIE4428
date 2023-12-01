@@ -262,13 +262,30 @@ navigator.mediaDevices.getUserMedia({ audio: true })
   .catch(function(error) {
     console.error('Error accessing media devices:', error);
   });
-
+var isMicrophoneMuted = false;
 var muteCheckbox = document.getElementById('Mute');
 muteCheckbox.addEventListener('change', function() {
-  if (audioTrack) {
-    audioTrack.enabled = !muteCheckbox.checked;
-  }
+  isMicrophoneMuted = muteCheckbox.checked;
+  updateMicrophoneMute();
 });
+function updateMicrophoneMute() {
+  if (isMicrophoneMuted) {
+    connection.attachStreams.forEach(function(stream) {
+      var audioTrack = stream.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = false;
+      }
+    });
+  } else {
+    connection.attachStreams.forEach(function(stream) {
+      var audioTrack = stream.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = true;
+      }
+    });
+  }
+}
+updateMicrophoneMute();
 
 
 // detect 2G
